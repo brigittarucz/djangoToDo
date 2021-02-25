@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Todo</title>
+</head>
+<body>
+        <h1>Todo</h1>
+        <hr />
+        <p>Welcome {{ user }} - <a href="{% url 'login_app:logout' %}">Log out</a> 
+                <a href="{% url 'login_app:delete_account' %}">Delete Account</a></p>
+        <ul>
+                {% for todo in todos %}
+                        <li>
+                        <!-- This comes from defining the name argument in the path() functions in urls.py -->
+                        <!-- The way this works is by looking up the URL definition as specified in the mini_project_app.urls module. -->
+                        <!-- Once you add the view name here in the template you need a view function to handle it -->
+                        <form action="{% url 'mini_project_app:change_status' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="checkbox" name="checked" {% if todo.status %}checked{% endif %} >
+                                <button>Update</button>
+                                <!-- Form action allows to reuse the form submitting it to our desired page -->
+                                <button formaction="{% url 'mini_project_app:delete_todo' %}"> Delete </button>
+                                <input type="hidden" name="pk" value="{{ todo.pk }}">
+                                {{ todo.text }}
+                        </form>
+                        </li>
+                {% endfor %}
+        </ul>
+        <form action="." method="POST">
+                <!-- Is a tag that inserts a hidden input field with a unique single use token for security -->
+                {% csrf_token %}
+                <input type="text" name="text" placeholder="Write todo item here" />
+                <button> Create todo </button>
+        </form>
+        <hr />
+        <a href="{% url 'mini_project_app:completed_todos' %}"> Completed todos </a>
+</body>
+</html>

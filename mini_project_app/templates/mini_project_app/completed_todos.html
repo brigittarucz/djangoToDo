@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Completed Todos</title>
+</head>
+<body>
+        <h1>Completed Todos</h1>
+        <hr />
+        <ul>
+                {% for todo in todos %}
+                        <li>
+                        <!-- {% url 'name-of-app:name-of-route' %} -->
+                        <form action="{% url 'mini_project_app:change_status' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="checkbox" name="checked" {% if todo.status %}checked{% endif %} >
+                                <button>Update</button>
+                                <button formaction="{% url 'mini_project_app:delete_todo' %}">Delete</button>
+                                <input type="hidden" name="pk" value="{{ todo.pk }}">
+                                {{ todo.text }}
+                        </form>
+                        </li>
+                {% endfor %}
+        </ul>
+
+        <hr />
+        <a href="{% url 'mini_project_app:index' %}"> It all ends here </a>
+</body>
+</html>
